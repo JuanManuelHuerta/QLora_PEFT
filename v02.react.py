@@ -1,18 +1,27 @@
+import yaml
 from langchain.agents import load_tools
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.llms import OpenAI
 
-llm = OpenAI(temperature=0,openai_api_key="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",llm_model_name="text-davinci-002")
-#llm = OpenAI(temperature=0, model_name="text-davinci-002")
-##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
 
-#SERPAPI_API_KEY=d60ca30af2e988b9d33ece4f07102721428d32240ec631aa12b372b80943dd5d
+def read_yaml(file_path):
+    with open(file_path, "r") as f:
+        return yaml.safe_load(f)
+
+
+
+
+config=read_yaml('my_config.yaml')
+
+
+llm = OpenAI(temperature=0,openai_api_key=config["KEYS"]["OPENAI"],model=config["MODEL"]["LLM"])
+
 
 
 ##https://python.langchain.com/docs/modules/agents/agent_types/react
 
-tools = load_tools(["serpapi", "llm-math"], llm=llm,serpapi_api_key="d60ca30af2e988b9d33ece4f07102721428d32240ec631aa12b372b80943dd5d")
+tools = load_tools(["serpapi", "llm-math"], llm=llm,serpapi_api_key=config["KEYS"]["SERPAPI"])
 
 
 agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
