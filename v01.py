@@ -1,6 +1,20 @@
+!pip install bitsandbytes
+!pip install torch
+!pip install transformers
+!pip install accelerate
+!pip install scipy
+!pip install peft
+!pip install datasets
+!pip install wandb
+
+
+
+
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
+
+####  https://github.com/huggingface/peft
 
 model_name = "EleutherAI/gpt-neox-20b"
 
@@ -39,21 +53,26 @@ model = get_peft_model(model, config)
 
 
 from datasets import load_dataset
+
 data = load_dataset("Abirate/english_quotes")
 data = data.map(lambda samples: tokenizer(samples["quote"]), batched=True)
+
+#data = load_dataset("Anthropic/hh-rlhf")
+#data = data.map(lambda samples: tokenizer(samples["chosen"]), batched=True)
 
 import transformers
 
 tokenizer.pad_token = tokenizer.eos_token
+#tokenizer.truncation = True
 
 trainer = transformers.Trainer(
     model=model,
     train_dataset=data["train"],
     args=transformers.TrainingArguments(
         per_device_train_batch_size=1,
-        gradient_accumulation_steps=8,
-        warmup_steps=2,
-        max_steps=20,
+        gradient_accumulation_steps=16,
+        warmup_steps=16,
+        max_steps=40,
         learning_rate=2e-4,
         fp16=True,
         logging_steps=1,
