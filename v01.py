@@ -1,11 +1,11 @@
-!pip install bitsandbytes
-!pip install torch
-!pip install transformers
-!pip install accelerate
-!pip install scipy
-!pip install peft
-!pip install datasets
-!pip install wandb
+#!pip install bitsandbytes
+#!pip install torch
+#!pip install transformers
+#!pip install accelerate
+#!pip install scipy
+#!pip install peft
+#!pip install datasets
+#!pip install wandb
 
 
 
