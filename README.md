@@ -3,6 +3,8 @@
 
 
 
+This was in the Mac:
+
    40  python -m venv qlora
    43  source qlora/bin/activate
    46  pip install bitsandbytes

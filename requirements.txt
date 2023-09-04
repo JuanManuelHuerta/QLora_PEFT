@@ -1,7 +1,8 @@
+cudatoolkit==11.7
 bitsandbytes
 torch
 transformers
-accelerate
+accelerate==0.20.3
 scipy
 peft
 datasets
