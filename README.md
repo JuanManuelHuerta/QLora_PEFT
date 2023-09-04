@@ -18,3 +18,9 @@ This was in the Mac:
 
 
 
+On the PC it seems that this is needed:
+
+
+conda install -c conda-forge cudatoolkit=11.2 cudnn=8.1.0  # for tensorflow version >2.5
+
+

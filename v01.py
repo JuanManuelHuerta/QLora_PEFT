@@ -16,7 +16,12 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 
 ####  https://github.com/huggingface/peft
 
-model_name = "EleutherAI/gpt-neox-20b"
+#model_name = "EleutherAI/gpt-neox-20b"
+#model_name = "EleutherAI/gpt-neo-2.7B"
+#model_name = "EleutherAI/gpt-neo-1.3B"
+#model_name = "EleutherAI/neox-ckpt-pythia-410m"
+#model_name ="EleutherAI/pythia-160m"
+model_name= "EleutherAI/pythia-1b-deduped-v0"
 
 #Tokenizer
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -69,10 +74,10 @@ trainer = transformers.Trainer(
     model=model,
     train_dataset=data["train"],
     args=transformers.TrainingArguments(
-        per_device_train_batch_size=1,
+        per_device_train_batch_size=8,
         gradient_accumulation_steps=16,
         warmup_steps=16,
-        max_steps=40,
+        max_steps=1000,
         learning_rate=2e-4,
         fp16=True,
         logging_steps=1,
