@@ -1,4 +1,3 @@
-cudatoolkit==11.7
 bitsandbytes
 torch
 transformers
