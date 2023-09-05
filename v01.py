@@ -12,6 +12,9 @@
 
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+from datasets import load_dataset
+import transformers
 
 
 ####  https://github.com/huggingface/peft
@@ -35,12 +38,7 @@ quant_config = BitsAndBytesConfig(
 )
 
 model = AutoModelForCausalLM.from_pretrained(model_name, quantization_config=quant_config, device_map={"":0})
-
-
 model.gradient_checkpointing_enable()
-
-
-from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
 
 model = prepare_model_for_kbit_training(model)
 
@@ -55,17 +53,11 @@ config = LoraConfig(
 
 model = get_peft_model(model, config)
 
-
-
-from datasets import load_dataset
-
 data = load_dataset("Abirate/english_quotes")
 data = data.map(lambda samples: tokenizer(samples["quote"]), batched=True)
 
 #data = load_dataset("Anthropic/hh-rlhf")
 #data = data.map(lambda samples: tokenizer(samples["chosen"]), batched=True)
-
-import transformers
 
 tokenizer.pad_token = tokenizer.eos_token
 #tokenizer.truncation = True
@@ -90,11 +82,9 @@ trainer.train()
 
 
 
-
-
 while True:
     text = input("Enter prompt here:")
     device = "cuda:0"
     inputs = tokenizer(text, return_tensors="pt").to(device)
-    outputs = model.generate(**inputs, max_new_tokens=20)
+    outputs = model.generate(**inputs, max_new_tokens=128)
     print(tokenizer.decode(outputs[0], skip_special_tokens=True))
